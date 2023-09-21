@@ -24,10 +24,6 @@ jobs:
         TAG="v$(date +'%Y%m%d')-$(git rev-parse --short HEAD)"
         git tag "$TAG"
 
-    - name: Push Git tag
-      run: |
-        git push origin "$TAG"
-
     - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
