@@ -18,15 +18,6 @@ jobs:
         git config --global user.name "kdahal"
         git config --global user.email "kumar.dahal@outlook.com"
 
-    - name: Bump version (optional)
-      run: |
-        # You can use a tool like Semver or bumpversion to automate version increment.
-        # For example, you can use 'npm version' for Node.js projects.
-        # Replace this step with your versioning strategy.
-
-        # Example using npm version:
-        # npm version patch -m "Bump version to %s"
-
     - name: Create Git tag
       run: |
         # Generate a unique tag based on the current date and commit hash.
@@ -48,12 +39,10 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Deploy or Notify (optional)
-      run: |
-        # Add deployment or notification steps here, such as deploying to a server,
-        # sending notifications to a chat platform, or triggering other workflows.
-        # You can use the release assets URL provided by GitHub to access the uploaded files.
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
 
-        # Example: Deploy to a server using SSH
-        # scp -i /path/to/ssh-key ./path/to/your/file user@server:/path/to/destination/
-
+    - name: Publish to GitHub Packages Apache Maven
+      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
